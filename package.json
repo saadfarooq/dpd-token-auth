@@ -1,0 +1,24 @@
+{
+  "name": "dpd-token-auth",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "apache",
+  "dependencies": {
+    "debug": "^2.1.1",
+    "googleapis": "^1.1.1",
+    "hat": "0.0.3",
+    "jsonwebtoken": "^3.2.2",
+    "underscore": "^1.7.0"
+  },
+  "readme": "ERROR: No README data found!",
+  "_id": "dpd-token-auth@0.0.1",
+  "_shasum": "1eb3e06795884ede16cfeb47caee73033c98e103",
+  "_resolved": "git://github.com/saadfarooq/dpd-token-auth#f3e004e8423e03f82454cb664619090baffe98e6",
+  "_from": "git://github.com/saadfarooq/dpd-token-auth#google",
+  "_fromGithub": true
+}
