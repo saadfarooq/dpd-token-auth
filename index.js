@@ -38,7 +38,11 @@ TokenAuth.prototype.handleLogin = function(ctx) {
   function done(err, user) {
     if (err) ctx.done(err);
     ctx.done(null, {
-      token: jwt.sign(user.id, self.config.serverSecret)
+      token: jwt.sign({ uid: user.id }, self.config.serverSecret,
+        {
+          expiresInMinutes: self.config.tokenExpiry || 24 * 60 ,
+          issuer: 'urn:deployd'
+        })
     });
   };
 
@@ -62,10 +66,10 @@ TokenAuth.prototype.handleSession = function(ctx, fn) {
   function done(err, result) {
     debug('err: %j', err);
     debug('result: %j', result);
-    if (err) fn(err);
+    if (err) return ctx.done(err);
     ctx.session.user = result;
     ctx.session.data.uid = result.id;
-    fn(null, result);
+    ctx.done(null, result);
   };
 
   if (req.headers && req.headers.authorization) {
@@ -99,13 +103,13 @@ TokenAuth.prototype.validateToken = function(token, fn) {
   self.userCollection = process.server.resources.filter(function(res) {
     return res.config.type === 'UserCollection'
   })[0];
-  jwt.verify(token, self.config.serverSecret, {},
+  jwt.verify(token, self.config.serverSecret, { issuer: 'urn:deployd'},
     function(err, decoded) {
-      if (err) fn(err);
+      if (err) return fn(err);
       debug('decoded jwt payload: %j', decoded);
       // get the user from id
       self.userCollection.store.first({
-        id: decoded.id
+        id: decoded.uid
       }, fn);
     });
 };
@@ -130,6 +134,10 @@ TokenAuth.prototype.clientGenerationExec = ['google'];
 
 TokenAuth.basicDashboard = {
   settings: [{
+    name: 'tokenExpiry',
+    type: 'number',
+    description: 'The time duration for tokens to expire (in minutes). Defaults to 24 hours.'
+  }, {
     name: 'serverSecret',
     type: 'text',
     description: 'The secret used for signing tokens'
