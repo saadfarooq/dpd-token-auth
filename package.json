@@ -1,6 +1,6 @@
 {
   "name": "dpd-token-auth",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A Deployd resource that enables authentication using tokens and sign-up using other services",
   "main": "index.js",
   "scripts": {
